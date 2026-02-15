@@ -16,32 +16,31 @@ def load_key():
     return key
 
 
-def add(f):
+def add(fernet):
     login = input("Введите логин: ")
     password = input("Введите пароль: ")
-    new_password = f.encrypt(password.encode()).decode()
+    new_password = fernet.encrypt(password.encode()).decode()
     with open("passwords.txt", "a") as file:
         file.write(f'{login}|{new_password}\n')
 
 
-def view(f):
+def view(fernet):
     with open("passwords.txt", "r") as file:
         for line in file:
-            line.strip()
-            login, password = line.split("|")
-            print(f"Логин: {login} | Пароль: {f.decrypt(password.encode()).decode()}")
+            login, password = line.strip().split("|")
+            print(f"Логин: {login} | Пароль: {fernet.decrypt(password.encode()).decode()}")
 
 
 def main():
     write_key()
     key = load_key()
-    f = Fernet(key)
+    fernet = Fernet(key)
     while True:
         choice = int(input("Хотите добавить новый пароль или посмотреть существующие 1. Посмотреть 2. Добавить? Нажмите 3, чтобы выйти "))
         if choice == 1:
-            view(f)
+            view(fernet)
         elif choice == 2:
-            add(f)
+            add(fernet)
         elif choice == 3:
             break
         else:
