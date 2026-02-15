@@ -37,8 +37,10 @@ def main():
     fernet = Fernet(key)
     while True:
         choice = int(input("Хотите добавить новый пароль или посмотреть существующие 1. Посмотреть 2. Добавить? Нажмите 3, чтобы выйти "))
-        if choice == 1:
+        if choice == 1 and os.path.exists("passwords.txt"):
             view(fernet)
+        elif choice == 1 and not os.path.exists("passwords.txt"):
+            print("Сначала добавьте пользователя")
         elif choice == 2:
             add(fernet)
         elif choice == 3:
